@@ -60,14 +60,17 @@ for (p in seq(nrow(priors))){
     refresh = 500,
     max_treedepth = 20,
     adapt_delta = 0.99)
-    
+  
+  
+  model_sum <- samples$summary()
+  
   draws_df <- as_draws_df(samples$draws())
   temp <- tibble(alpha = draws_df$alpha,
                  beta = draws_df$beta,
                  beta2 = draws_df$beta2,
-                 alpha_sd = samples$summary()[2,4],
-                 beta_sd = samples$summary()[3,4],
-                 beta2_sd = samples$summary()[4,4],
+                 alpha_sd = model_sum[2,4],
+                 beta_sd = model_sum[3,4],
+                 beta2_sd = model_sum[4,4],
                  alpha_prior = draws_df$alpha_prior,
                  beta_prior = draws_df$beta_prior,
                  beta2_prior = draws_df$beta2_prior,
