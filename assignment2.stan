@@ -14,30 +14,30 @@ data {
   int<lower = 0> n;
   array[n] int h;
   
-  vector<lower=-1, upper=1>[n] stay_bias; 
-  vector<lower=-1, upper=1>[n] leave_bias;
+  vector<lower=-1, upper=1>[n] win_bias; 
+  vector<lower=-1, upper=1>[n] loose_bias;
   
   real alpha_prior_mean;
-  real beta_prior_mean;
-  real beta2_prior_mean;
+  real win_beta_prior_mean;
+  real loose_beta_prior_mean;
   
   real<lower=0> alpha_prior_sd;
-  real<lower=0> beta_prior_sd;
-  real<lower=0> beta2_prior_sd;
+  real<lower=0> win_beta_prior_sd;
+  real<lower=0> loose_beta_prior_sd;
 }
 
 // The parameters accepted by the model. Our model
 // accepts two parameters 'mu' and 'sigma'.
 parameters {
   real alpha;
-  real beta;
-  real beta2; 
+  real win_beta;
+  real loose_beta; 
   
 } 
 
 transformed parameters{
   vector[n] theta;
-  theta = alpha + beta * stay_bias + beta2 * leave_bias;
+  theta = alpha + win_beta * win_bias + loose_beta * loose_bias;
 }
 
 // The model to be estimated. We model the output
@@ -45,27 +45,26 @@ transformed parameters{
 // and standard deviation 'sigma'.
 model {
   target += normal_lpdf(alpha | alpha_prior_mean, alpha_prior_sd);
-  target += normal_lpdf(beta | beta_prior_mean, beta_prior_sd);
-  target += normal_lpdf(beta2 | beta2_prior_mean, beta2_prior_sd);
+  target += normal_lpdf(win_beta | win_beta_prior_mean, win_beta_prior_sd);
+  target += normal_lpdf(loose_beta | loose_beta_prior_mean, loose_beta_prior_sd);
   
-  target += bernoulli_logit_lpmf(h | theta);
+  target += bernoulli_logit_lpmf(h | alpha + win_beta * win_bias + loose_beta * loose_bias);
   
 }
 
 generated quantities{
   real alpha_prior;
-  real beta_prior;
-  real beta2_prior;
+  real win_beta_prior;
+  real loose_beta_prior;
     
-  int<lower=0, upper=n> prior_preds;
-  int<lower=0, upper=n> posterior_preds;
-  
-  alpha_prior = normal_rng(alpha_prior_mean, alpha_prior_sd);
-  beta_prior = normal_rng(beta_prior_mean, beta_prior_sd);
-  beta2_prior = normal_rng(beta2_prior_mean, beta2_prior_sd);
+  array[n] int posterior_preds;
 
-  prior_preds = to_vector(binomial_rng(n, inv_logit(alpha_prior + beta_prior * stay_bias + beta2_prior * leave_bias)));
-  posterior_preds = to_vector(binomial_rng(n, inv_logit(alpha + beta * stay_bias + beta2 * leave_bias)));
+  alpha_prior = normal_rng(alpha_prior_mean, alpha_prior_sd);
+  win_beta_prior = normal_rng(win_beta_prior_mean, win_beta_prior_sd);
+  loose_beta_prior = normal_rng(loose_beta_prior_mean, loose_beta_prior_sd);
+
+  //prior_preds = binomial_rng(n, inv_logit(alpha_prior + beta_prior * heads_bias + beta2_prior * tails_bias));
+  posterior_preds = binomial_rng(n, inv_logit(alpha + win_beta * win_bias + loose_beta * loose_bias));
 }
 
 
