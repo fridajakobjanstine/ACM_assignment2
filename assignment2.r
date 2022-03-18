@@ -28,12 +28,12 @@ win_beta_prior_sd <- c(.5)
 lose_beta_prior_sd <- c(.5) 
 
 # Generate all possible combinations of prior-parameters
-priors <-  expand.grid(alpha_prior_mean, win_beta_prior_mean, loose_beta_prior_mean,
-                    alpha_prior_sd, win_beta_prior_sd, loose_beta_prior_sd)
+priors <-  expand.grid(alpha_prior_mean, win_beta_prior_mean, lose_beta_prior_mean,
+                    alpha_prior_sd, win_beta_prior_sd, lose_beta_prior_sd)
 
 # Convert table to tibble
-priors <-  tibble(alpha_prior_mean=priors$Var1, win_beta_prior_mean=priors$Var2, loose_beta_prior_mean=priors$Var3,
-               alpha_prior_sd=priors$Var4, win_beta_prior_sd=priors$Var5, loose_beta_prior_sd=priors$Var6)
+priors <-  tibble(alpha_prior_mean=priors$Var1, win_beta_prior_mean=priors$Var2, lose_beta_prior_mean=priors$Var3,
+               alpha_prior_sd=priors$Var4, win_beta_prior_sd=priors$Var5, lose_beta_prior_sd=priors$Var6)
 
 # Load STAN model
 file <- file.path("Desktop/Cognitive_Science/Cognitive Science 8th Semester/Advanced Cognitive Modeling/Week 3 - Stan/assignment2.stan")
@@ -47,13 +47,13 @@ for (p in seq(nrow(priors))){
     n = nrow(data), 
     h = data$agent_choices, 
     win_bias = data$Win_bias, 
-    loose_bias = data$Lose_bias,
+    lose_bias = data$Lose_bias,
     alpha_prior_mean=priors$alpha_prior_mean[p],
     win_beta_prior_mean=priors$win_beta_prior_mean[p],
-    loose_beta_prior_mean=priors$loose_beta_prior_mean[p],
+    lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
     alpha_prior_sd=priors$alpha_prior_sd[p],
     win_beta_prior_sd=priors$win_beta_prior_sd[p],
-    loose_beta_prior_sd=priors$loose_beta_prior_sd[p])
+    lose_beta_prior_sd=priors$lose_beta_prior_sd[p])
   
   # Fit STAN model
   samples <- mod$sample(
@@ -75,19 +75,19 @@ for (p in seq(nrow(priors))){
   draws_df <- as_draws_df(samples$draws())
   temp <- tibble(alpha = draws_df$alpha,
                  win_beta = draws_df$win_beta,
-                 loose_beta = draws_df$loose_beta,
+                 lose_beta = draws_df$lose_beta,
                  alpha_sd = model_sum[2,4],
                  win_beta_sd = model_sum[3,4],
-                 loose_beta_sd = model_sum[4,4],
+                 lose_beta_sd = model_sum[4,4],
                  alpha_prior = draws_df$alpha_prior,
                  win_beta_prior = draws_df$win_beta_prior,
-                 loose_beta_prior = draws_df$loose_beta_prior,
+                 lose_beta_prior = draws_df$lose_beta_prior,
                  alpha_prior_mean=priors$alpha_prior_mean[p],
                  win_beta_prior_mean=priors$win_beta_prior_mean[p],
-                 loose_beta_prior_mean=priors$loose_beta_prior_mean[p],
+                 lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
                  alpha_prior_sd=priors$alpha_prior_sd[p],
                  win_beta_prior_sd=priors$win_beta_prior_sd[p],
-                 loose_beta_prior_sd=priors$loose_beta_prior_sd[p])
+                 lose_beta_prior_sd=priors$lose_beta_prior_sd[p])
   
   # Generate df for sensitivity plots
   if (exists('sensitivity_df')){sensitivity_df <- rbind(sensitivity_df, temp)} else {sensitivity_df <- temp}
