@@ -17,13 +17,15 @@ data <- d %>% subset(rate == 0.7)
 
 
 # Define different priors
-alpha_prior_mean <- c(0)
+# We use a prior distribution centered at 0 with a sd of 1 for the alpha (noise). 
+# For both beta estimates (win/lose), we use prior distributions with a mean and sd of .5 (i.e. chance) 
+alpha_prior_mean <- c(0) 
 win_beta_prior_mean <- c(.5)
-loose_beta_prior_mean <- c(.5)
+lose_beta_prior_mean <- c(.5)
 
-alpha_prior_sd <- c(1)
-win_beta_prior_sd <- c(.5)
-loose_beta_prior_sd <- c(.5)
+alpha_prior_sd <- c(1) 
+win_beta_prior_sd <- c(.5) 
+lose_beta_prior_sd <- c(.5) 
 
 # Generate all possible combinations of prior-parameters
 priors <-  expand.grid(alpha_prior_mean, win_beta_prior_mean, loose_beta_prior_mean,
@@ -42,9 +44,9 @@ for (p in seq(nrow(priors))){
   
   # Specify data
   d <- list(
-    n = nrow(data),
-    h = data$agent_choices,
-    win_bias = data$Win_bias,
+    n = nrow(data), 
+    h = data$agent_choices, 
+    win_bias = data$Win_bias, 
     loose_bias = data$Lose_bias,
     alpha_prior_mean=priors$alpha_prior_mean[p],
     win_beta_prior_mean=priors$win_beta_prior_mean[p],
