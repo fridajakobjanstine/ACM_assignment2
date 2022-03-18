@@ -14,8 +14,8 @@ data {
   int<lower = 0> n;
   array[n] int h;
   
-  vector<lower=-1, upper=1>[n] stay_bias; 
-  vector<lower=-1, upper=1>[n] leave_bias;
+  vector<lower=-1, upper=1>[n] heads_bias; 
+  vector<lower=-1, upper=1>[n] tails_bias;
   
   real alpha_prior_mean;
   real beta_prior_mean;
@@ -37,7 +37,7 @@ parameters {
 
 transformed parameters{
   vector[n] theta;
-  theta = alpha + beta * stay_bias + beta2 * leave_bias;
+  theta = alpha + beta * heads_bias + beta2 * tails_bias;
 }
 
 // The model to be estimated. We model the output
@@ -64,8 +64,8 @@ generated quantities{
   beta_prior = normal_rng(beta_prior_mean, beta_prior_sd);
   beta2_prior = normal_rng(beta2_prior_mean, beta2_prior_sd);
 
-  prior_preds = to_vector(binomial_rng(n, inv_logit(alpha_prior + beta_prior * stay_bias + beta2_prior * leave_bias)));
-  posterior_preds = to_vector(binomial_rng(n, inv_logit(alpha + beta * stay_bias + beta2 * leave_bias)));
+  #prior_preds = to_vector(binomial_rng(n, inv_logit(alpha_prior + beta_prior * stay_bias + beta2_prior * leave_bias)));
+  #posterior_preds = to_vector(binomial_rng(n, inv_logit(alpha + beta * stay_bias + beta2 * leave_bias)));
 }
 
 

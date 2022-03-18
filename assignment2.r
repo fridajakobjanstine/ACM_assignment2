@@ -3,7 +3,7 @@ pacman::p_load(tidyverse, here, posterior, cmdstanr, brms, sigmoid)
 
 
 # Read data
-d  <- read_csv("Desktop/Cognitive_Science/Cognitive Science 8th Semester/Advanced Cognitive Modeling/Week 3 - Stan/game_data_rate_loops.csv")
+d  <- read_csv("game_data_rate_loops.csv")
 
 data <- d %>% subset(rate == 0.7)
 
@@ -31,7 +31,7 @@ priors <-  tibble(alpha_prior_mean=priors$Var1, beta_prior_mean=priors$Var2, bet
                alpha_prior_sd=priors$Var4, beta_prior_sd=priors$Var5, beta2_prior_sd=priors$Var6)
 
 # Loading model
-file <- file.path("Desktop/Cognitive_Science/Cognitive Science 8th Semester/Advanced Cognitive Modeling/Week 3 - Stan/assignment2.stan")
+file <- file.path("assignment2.stan")
 mod <-  cmdstan_model(file, cpp_options = list(stan_threads = TRUE))
 
 # Looping throgh priors
