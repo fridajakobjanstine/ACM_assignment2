@@ -10,11 +10,18 @@ logit2prob <- function(logit){
 }
 
 # Read data
-d  <- read_csv("Desktop/Cognitive_Science/Cognitive Science 8th Semester/Advanced Cognitive Modeling/Week 3 - Stan/feedback_agent_10000_trials.csv")
+d  <- read.csv("feedback_agent_10000_trials.csv")
+
+# Lag the two columns, use 0 as default
+d <- d %>% 
+  group_by(rate) %>% 
+  # Dont know whether we want 0 as default? Makes sense to me and I suspect STAN cant handle NAs
+  mutate(win_bias_lag = dplyr::lag(Win_bias, default = 0),
+         lose_bias_lag = dplyr::lag(Lose_bias, default = 0))
 
 # Subset to 1 rate
-data <- d %>% subset(rate == 0.7)
-
+data <- d %>% 
+  subset(rate == 0.7) 
 
 # Define different priors
 # We use a prior distribution centered at 0 with a sd of 1 for the alpha (noise). 
@@ -46,8 +53,10 @@ for (p in seq(nrow(priors))){
   d <- list(
     n = nrow(data), 
     h = data$agent_choices, 
-    win_bias = data$Win_bias, 
-    lose_bias = data$Lose_bias,
+    # win_bias = data$Win_bias, 
+    # lose_bias = data$Lose_bias,
+    win_bias = data$win_bias_lag, 
+    lose_bias = data$lose_bias_lag,
     alpha_prior_mean=priors$alpha_prior_mean[p],
     win_beta_prior_mean=priors$win_beta_prior_mean[p],
     lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
