@@ -63,29 +63,26 @@ To do a parameter recovery analysis, we simulated data varying on two conditions
 
 The results of the analysis can be found in the table below
 
+
+| N simulated trials | Estimated rate of shifting | True rate of shifting | 
 |---|---|---|
-True rate of shifting | N simulated trials | Estimated parameter
-| 0.6 | 100 | x
-0.6 | 1000 | x
-0.6 | 10000 | x
-0.6 | 100000 | x
-
-0.65 | 100 | x
-0.65 | 1000 | x
-0.65 | 10000 | x
-0.65 | 100000 | x
-
-0.7 | 100 | x
-0.7 | 1000 | x
-0.7 | 10000 | x
-0.7 | 100000 | x
-
-0.75 | 100 | x
-0.75 | 1000 | x
-0.75 | 10000 | x
-0.75 | 100000 | x
-
-0.8 | 100 | x
-0.8 | 1000 | x
-0.8 | 10000 | x
-0.8 | 100000 | x
+| 100 | x |  0.6 | 
+| 1000 | x | 0.6 | 
+| 10000 | x | 0.6 |
+| 100000 | x | 0.6 |
+| 100 | x | 0.65 | 
+| 1000 | x | 0.65 |
+| 10000 | x | 0.65 |
+| 100000 | x | 0.65 |
+| 100 | x | 0.7 |
+| 1000 | x |  0.7 |
+| 10000 | x |  0.7 |
+| 100000 | x | 0.7 |
+| 100 | x | 0.75 |
+| 1000 | x | 0.75 |
+| 10000 | x | 0.75 |
+| 100000 | x | 0.75 |
+| 100 | x | 0.8 |
+| 1000 | x | 0.8 |
+| 10000 | x | 0.8 |
+| 100000 | x | 0.8 |
