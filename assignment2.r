@@ -10,18 +10,7 @@ logit2prob <- function(logit){
 }
 
 # Read data
-d  <- read.csv("feedback_agent_10000_trials.csv")
-
-# Lag the two columns, use 0 as default
-d <- d %>% 
-  group_by(rate) %>% 
-  # Dont know whether we want 0 as default? Makes sense to me and I suspect STAN cant handle NAs
-  mutate(win_bias_lag = dplyr::lag(Win_bias, default = 0),
-         lose_bias_lag = dplyr::lag(Lose_bias, default = 0))
-
-# Subset to 1 rate
-data <- d %>% 
-  subset(rate == 0.7) 
+raw_data  <- read.csv("feedback_agent_10000_trials.csv")
 
 # Define different priors
 # We use a prior distribution centered at 0 with a sd of 1 for the alpha (noise). 
@@ -36,71 +25,86 @@ lose_beta_prior_sd <- c(.5)
 
 # Generate all possible combinations of prior-parameters
 priors <-  expand.grid(alpha_prior_mean, win_beta_prior_mean, lose_beta_prior_mean,
-                    alpha_prior_sd, win_beta_prior_sd, lose_beta_prior_sd)
+                       alpha_prior_sd, win_beta_prior_sd, lose_beta_prior_sd)
 
 # Convert table to tibble
 priors <-  tibble(alpha_prior_mean=priors$Var1, win_beta_prior_mean=priors$Var2, lose_beta_prior_mean=priors$Var3,
-               alpha_prior_sd=priors$Var4, win_beta_prior_sd=priors$Var5, lose_beta_prior_sd=priors$Var6)
+                  alpha_prior_sd=priors$Var4, win_beta_prior_sd=priors$Var5, lose_beta_prior_sd=priors$Var6)
 
 # Load STAN model
-file <- file.path("Desktop/Cognitive_Science/Cognitive Science 8th Semester/Advanced Cognitive Modeling/Week 3 - Stan/assignment2.stan")
+file <- file.path("assignment2.stan")
 mod <-  cmdstan_model(file, cpp_options = list(stan_threads = TRUE))
 
-# Looping through priors
-for (p in seq(nrow(priors))){
-  
-  # Specify data
-  d <- list(
-    n = nrow(data), 
-    h = data$agent_choices, 
-    # win_bias = data$Win_bias, 
-    # lose_bias = data$Lose_bias,
-    win_bias = data$win_bias_lag, 
-    lose_bias = data$lose_bias_lag,
-    alpha_prior_mean=priors$alpha_prior_mean[p],
-    win_beta_prior_mean=priors$win_beta_prior_mean[p],
-    lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
-    alpha_prior_sd=priors$alpha_prior_sd[p],
-    win_beta_prior_sd=priors$win_beta_prior_sd[p],
-    lose_beta_prior_sd=priors$lose_beta_prior_sd[p])
-  
-  # Fit STAN model
-  samples <- mod$sample(
-    data = d,
-    seed = 123,
-    chains = 2,
-    parallel_chains = 2,
-    threads_per_chain = 2,
-    iter_warmup = 1000,
-    iter_sampling = 1000,
-    refresh = 500,
-    max_treedepth = 20,
-    adapt_delta = 0.99)
-  
-  # Get model summary
-  model_sum <- samples$summary()
-  
-  # Return model defined priors and posteriors
-  draws_df <- as_draws_df(samples$draws())
-  temp <- tibble(alpha = draws_df$alpha,
-                 win_beta = draws_df$win_beta,
-                 lose_beta = draws_df$lose_beta,
-                 alpha_sd = model_sum[2,4],
-                 win_beta_sd = model_sum[3,4],
-                 lose_beta_sd = model_sum[4,4],
-                 alpha_prior = draws_df$alpha_prior,
-                 win_beta_prior = draws_df$win_beta_prior,
-                 lose_beta_prior = draws_df$lose_beta_prior,
-                 alpha_prior_mean=priors$alpha_prior_mean[p],
-                 win_beta_prior_mean=priors$win_beta_prior_mean[p],
-                 lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
-                 alpha_prior_sd=priors$alpha_prior_sd[p],
-                 win_beta_prior_sd=priors$win_beta_prior_sd[p],
-                 lose_beta_prior_sd=priors$lose_beta_prior_sd[p])
-  
-  # Generate df for sensitivity plots
-  if (exists('sensitivity_df')){sensitivity_df <- rbind(sensitivity_df, temp)} else {sensitivity_df <- temp}
+
+for (rate in unique(raw_data$rates)){
+  for (ntrials in unique(raw_data$ntrials)){
+    
+    # Lag the two columns, use 0 as default
+    data <- raw_data %>% 
+        subset(rate == rate) %>% 
+        subset(ntrials == ntrials) %>% 
+        mutate(win_bias_lag = dplyr::lag(Win_bias, default = 0),
+               lose_bias_lag = dplyr::lag(Lose_bias, default = 0))
+    # Looping through priors
+    for (p in seq(nrow(priors))){
+      
+      # Specify data
+      d <- list(
+        n = nrow(data), 
+        h = data$agent_choices, 
+        # win_bias = data$Win_bias, 
+        # lose_bias = data$Lose_bias,
+        win_bias = data$win_bias_lag, 
+        lose_bias = data$lose_bias_lag,
+        alpha_prior_mean=priors$alpha_prior_mean[p],
+        win_beta_prior_mean=priors$win_beta_prior_mean[p],
+        lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
+        alpha_prior_sd=priors$alpha_prior_sd[p],
+        win_beta_prior_sd=priors$win_beta_prior_sd[p],
+        lose_beta_prior_sd=priors$lose_beta_prior_sd[p])
+      
+      # Fit STAN model
+      samples <- mod$sample(
+        data = d,
+        seed = 123,
+        chains = 2,
+        parallel_chains = 2,
+        threads_per_chain = 2,
+        iter_warmup = 1000,
+        iter_sampling = 1000,
+        refresh = 500,
+        max_treedepth = 20,
+        adapt_delta = 0.99)
+      
+      # Get model summary
+      model_sum <- samples$summary()
+      
+      # Return model defined priors and posteriors
+      draws_df <- as_draws_df(samples$draws())
+      temp <- tibble(alpha = draws_df$alpha,
+                     win_beta = draws_df$win_beta,
+                     lose_beta = draws_df$lose_beta,
+                     alpha_sd = model_sum[2,4],
+                     win_beta_sd = model_sum[3,4],
+                     lose_beta_sd = model_sum[4,4],
+                     alpha_prior = draws_df$alpha_prior,
+                     win_beta_prior = draws_df$win_beta_prior,
+                     lose_beta_prior = draws_df$lose_beta_prior,
+                     alpha_prior_mean=priors$alpha_prior_mean[p],
+                     win_beta_prior_mean=priors$win_beta_prior_mean[p],
+                     lose_beta_prior_mean=priors$lose_beta_prior_mean[p],
+                     alpha_prior_sd=priors$alpha_prior_sd[p],
+                     win_beta_prior_sd=priors$win_beta_prior_sd[p],
+                     lose_beta_prior_sd=priors$lose_beta_prior_sd[p],
+                     rate = rate,
+                     ntrials = ntrials)
+      
+      # Generate df for sensitivity plots
+      if (exists('sensitivity_df')){sensitivity_df <- rbind(sensitivity_df, temp)} else {sensitivity_df <- temp}
+    }
+  }
 }
+
 
 write_csv(sensitivity_df, 'sensitivity_df.csv')
  
