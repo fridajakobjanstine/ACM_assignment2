@@ -17,7 +17,6 @@ __Bayesian model__:
 The data we are using are simulated from these assumptions. We simulate a game between the FeedbackAgent described above, and a completely random agent. They play for 1000 rounds. We then make two new columns, win_bias and lose_bias, respectively. win_bias has the value 1 (heads) if the Feedback Agent AND the random agent chose 0 (tails) in the present round, -1 if both agents chose 1 (heads) in the present round, and otherwise 0. This means that this column indicates pushing towards shifting when the two agents chose the same (meaning that Feedback Agent as the Matcher won). Likewise, lose_bias has value 1 when Feedback Agent chose 1 (heads) and random agent chose 0 (meaning that Feedback agent lost), -1 when Feedback agent chose 0 (tail) and random agents chose 1, and otherwise 0. 
 We then lagged those two columns, so that one row of the data contain information of the bias given the previous round and the choice given this bias. 
 
-(needs rewriting)  
 The data as described above was used to model the following: 
 
 choice ~ alpha + win_beta * win_bias + lose_beta * lose_bias
@@ -34,9 +33,9 @@ Parameters to estimate:
 All parameters were modeled with normally distributed priors. We used three different priors for the means to perform some prior robustness checks. 
 
 Prior means:
-- alpha: -0.5, 0, 0.5. 0 is the main prior, the other two are robustness checks
-- win_beta: 0, 0.5, 1. 0.5 is the main prior (which is equal to chance), the other two are robustness checks
-- lose_beta: 0, 0.5, 1. 0.5 is the main prior (which is equal to chance), the other two are robustness checks
+- alpha: -0.5, 0, 0.5 where 0 is the main prior, the other two are robustness checks
+- win_beta: 0, 0.5, 1 where 0.5 is the main prior (which is equal to chance), the other two are robustness checks
+- lose_beta: 0, 0.5, 1 where 0.5 is the main prior (which is equal to chance), the other two are robustness checks
 
 Prior sd:
 - alpha: sd = 1 (large standard deviation to not constrain the estimate of the noise, even though we expect it to be low)
@@ -46,4 +45,46 @@ Prior sd:
 When building our model, we use simulations to perform parameter recovery. By simulating data from known parameters we know the “truth”. By applying our model to simulated data, we can run checks on the model to see how well it recovers (i.e., how accurate our estimates are) for different simulations. This could e.g. show us that we need a more simple model or more data. In this way, the process of parameter recovery will hopefully make it less likely that we draw invalid conclusions with our model. Parameter recovery is important for validating the inferences you make in a cognitive modeling analysis. It helps you understand whether your analysis can tell you anything about what is actually going on.
 
 ## Discussing results
-...plots
+
+# Prior robustness checks
+We performed a prior robustness check of the mean values for the parameters alpha, win_beta and lose_beta. We kept the sd constant to reduce computation time. Ideally, we would also have performed robustness checks of the sds. The sd of the alpha (1) means the distribution is quite wide, so we argue it is unlikely that the priors has a too large impact on the parameter estimates. Likewise, the sd of the prior for the betas (0.5) is large enough that it allows for estimates of the bias to be 0 and 1, which is reasonable estimates. 
+
+The prior robustness checks for the means can be seen in this figure:
+-- insert figure --
+
+Based on these checks, we decided to use the following priors for the parameter recovery analysis: 
+- alpha: mean = 0, sd = 1
+- win_beta: mean = 0.5, sd = 0.5
+- lose_beta: mean = 0.5, sd = 0.5
+
+# Parameter recovery
+To do a parameter recovery analysis, we simulated data varying on two conditions: rate of shifting (bias) and number of trials. We tested rates for shifting of 0.6, 0.65, 0.7, 0.75 and 0.8. For all these rates, we tested games of 100, 1000, 10000 and 100000. The range of number of trials was chosen to increase by orders of magnitude, and the rates were manually chosen to represent plausible real-life shifting biases. A visualization of the parameter recovery under the conditions described above can be seen here: 
+-- insert figure --
+
+The results of the analysis can be found in the table below
+
+True rate of shifting | N simulated trials | Estimated parameter
+0.6 | 100 | x
+0.6 | 1000 | x
+0.6 | 10000 | x
+0.6 | 100000 | x
+
+0.65 | 100 | x
+0.65 | 1000 | x
+0.65 | 10000 | x
+0.65 | 100000 | x
+
+0.7 | 100 | x
+0.7 | 1000 | x
+0.7 | 10000 | x
+0.7 | 100000 | x
+
+0.75 | 100 | x
+0.75 | 1000 | x
+0.75 | 10000 | x
+0.75 | 100000 | x
+
+0.8 | 100 | x
+0.8 | 1000 | x
+0.8 | 10000 | x
+0.8 | 100000 | x
