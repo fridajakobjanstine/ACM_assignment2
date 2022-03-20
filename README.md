@@ -63,8 +63,9 @@ To do a parameter recovery analysis, we simulated data varying on two conditions
 
 The results of the analysis can be found in the table below
 
+|---|---|---|
 True rate of shifting | N simulated trials | Estimated parameter
-0.6 | 100 | x
+| 0.6 | 100 | x
 0.6 | 1000 | x
 0.6 | 10000 | x
 0.6 | 100000 | x
