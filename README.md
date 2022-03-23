@@ -104,4 +104,3 @@ In general, the results show that increasing the number of trials all the way to
 Overall, the analyses performed revealed that training the model using 10,000 simulated trials from an FeddbackAgent with a true Win-Shift-Loose-Stay bias of 0.7 and with the alpha prior defined as a Gaussian prior with a mean of 0 and sd = 1 and beta priors defined as Gaussian priors with means of 0.5 and sd of 0.5 adequately recovers the true parameter. The plot below display the prior-posterior update for the bias estimate (win_beta estimate) and shows that the model has confidently converged on the true bias:
 ![Prior-Posterior Main](pp_update_main.png "Prior-Posterior Main")
 
-
