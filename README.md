@@ -73,7 +73,6 @@ Ideally, we would have included all different combinations of priors in the prec
 
 ### Precision analysis
 To do a precision analysis, we simulated data varying on two conditions: rate of shifting (bias) and number of trials. We tested rates for shifting of 0.6, 0.65, 0.7, 0.75 and 0.8. For all these rates, we tested games of 100, 1000 and 10000. The range of number of trials was chosen to increase by orders of magnitude, and the rates were manually chosen to represent plausible real-life shifting biases given the assumption of natural variation in the population. A visualization of the parameter recovery under the conditions described above can be seen here: 
-
 ![Precision Analysis](plot_ntrials_check.png "Precision Analysis")
 
 The results of the analysis can also be found in the table below.
