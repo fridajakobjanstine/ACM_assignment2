@@ -65,7 +65,7 @@ Each row correspond to a different lose_beta prior, and each panel/column corres
 
 In general, the model seems well equipped to recover the true parameters given all of the combinations of parsed priors. Hence, the model is not overly sensistive to shifts in the priors and the defined set of priors all seem reasonable given the data. However, we deem that setting uninformed conservative beta priors with means of 0.5 and a sd of 0.5 makes most sense.
 
-Summingly, based on these checks, we decided to use the following priors for the parameter recovery analysis: 
+Summingly, based on these checks, we decided to use the following priors for the precision analysis: 
 - alpha: mean = 0, sd = 1
 - win_beta: mean = 0.5, sd = 0.5
 - lose_beta: mean = 0.5, sd = 0.5  
