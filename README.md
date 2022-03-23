@@ -65,10 +65,11 @@ Summingly, based on these checks, we decided to use the following priors for the
 Ideally, we would have included all different combinations of priors in the precision analysis, however, due to computation restraints we only use one prior for each parameter. Furthermore, given the low sensitivity of the model, it seems reasonable to only assess the effect of varying trials using a single set of priors.
 
 ### Precision analysis
-To do a precision analysis, we simulated data varying on two conditions: rate of shifting (bias) and number of trials. We tested rates for shifting of 0.6, 0.65, 0.7, 0.75 and 0.8. For all these rates, we tested games of 100, 1000 and 10000. The range of number of trials was chosen to increase by orders of magnitude, and the rates were manually chosen to represent plausible real-life shifting biases. A visualization of the parameter recovery under the conditions described above can be seen here: 
+To do a precision analysis, we simulated data varying on two conditions: rate of shifting (bias) and number of trials. We tested rates for shifting of 0.6, 0.65, 0.7, 0.75 and 0.8. For all these rates, we tested games of 100, 1000 and 10000. The range of number of trials was chosen to increase by orders of magnitude, and the rates were manually chosen to represent plausible real-life shifting biases given the assumption of natural variation in the population. A visualization of the parameter recovery under the conditions described above can be seen here: 
 -- insert figure --
 
-The results of the analysis can be found in the table below
+
+The results of the analysis can also be found in the table below.
 
 
 | N simulated trials | Posterior 'Win Beta' Estimate Mean | Posterior 'Win Beta' Estimate SD | True mean rate | 
@@ -88,3 +89,8 @@ The results of the analysis can be found in the table below
 | 100 | x | x | 0.8 |
 | 1000 | x | x | 0.8 |
 | 10000 | x | x | 0.8 |
+
+In general, the results show that increasing the number of trials all the way to 10,000 continuously increases parameter recovery performance of the model; the beta estimates increasingly approaches the true bias rate and the model becomes increasingly more confident in its estimations (sd drops). We do not deem it necessary to define strict thesholds for identifying the acceptable number of trials but instead conclude that, given the visible improvements from 1000 trials to 10,000 trials, that 10,000 trials is the optimal number needed for sufficient parameter recovery. We do, however, acknowledge that in real life settings, it may be complicated and expensive to gather 10,000 trials and, therefore, also conclude that parameters are also recovered with accecptable precision using e.g. only 1000 trials providing the researcher is aware of the slight decrease in confidence.
+
+
+## Conclusion
