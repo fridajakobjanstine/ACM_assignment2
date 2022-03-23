@@ -4,7 +4,7 @@ _Jakob, Stine, Jan, Frida_
 Code for assignment 2 in Advanced Cognitive Modeling, MSc Cognitive Science, Aarhus University.
 
 ------------
-For this assignment, we are exploring the modeling of a strategy for playing the Matching Pennies Game. 
+For this assignment, we are exploring the modeling of a strategy for playing the Matching Pennies Game. The overall purpose is to conduct a thorough prior robustness check and precision analysis on our proposed model using simulated data in order to ensure that the model is able to recover parameters meaningfully when adjusting priors and parameters appropriately.
 
 ## Analysis
 
@@ -68,25 +68,20 @@ To do a parameter recovery analysis, we simulated data varying on two conditions
 The results of the analysis can be found in the table below
 
 
-| N simulated trials | Estimated rate of shifting | True rate of shifting | 
+| N simulated trials | Posterior 'Win Beta' Estimate Mean | Posterior 'Win Beta' Estimate SD | True mean rate | 
 |---|---|---|
 | 100 | x |  0.6 | 
 | 1000 | x | 0.6 | 
 | 10000 | x | 0.6 |
-| 100000 | x | 0.6 |
 | 100 | x | 0.65 | 
 | 1000 | x | 0.65 |
 | 10000 | x | 0.65 |
-| 100000 | x | 0.65 |
 | 100 | x | 0.7 |
 | 1000 | x |  0.7 |
 | 10000 | x |  0.7 |
-| 100000 | x | 0.7 |
 | 100 | x | 0.75 |
 | 1000 | x | 0.75 |
 | 10000 | x | 0.75 |
-| 100000 | x | 0.75 |
 | 100 | x | 0.8 |
 | 1000 | x | 0.8 |
 | 10000 | x | 0.8 |
-| 100000 | x | 0.8 |
