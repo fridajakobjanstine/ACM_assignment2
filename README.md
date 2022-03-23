@@ -52,11 +52,12 @@ When building our model, we use simulations to perform parameter recovery. By si
 ### Prior robustness checks
 We performed a prior robustness check of the mean values for the parameters alpha, win_beta and lose_beta. We kept the sd constant to reduce computation time. Ideally, we would also have performed robustness checks of the sds. The sd of the alpha (1) means the distribution is quite wide, so we argue it is unlikely that the priors has a too large impact on the parameter estimates. Likewise, the sd of the prior for the betas (0.5) is large enough that e.g. given a mean of 0.5 it allows for estimates of the bias to settle between 0 and 1, which is reasonable estimates. 
 
-The prior robustness checks for the means can be seen in this figure:
+The prior robustness checks for the win_beta estimate can be seen in the two figures below. The win_beta estimate is the most relevant estimate to assess as this parameter reflects the Win-Shift-Lose-Stay bias defined in the data simulation and, hence, we only display sensitivity plots for this estimate. If recovered correctly (this is the case for all runs), the inverse logit of the lose_beta estimate represents 1-win_beta. As we have no noise parameter in any of the agents, this parameter is expected to be 0. All prior settings recover this parameter adequately as somewhere close to zero, so we have omitted plots for this as they are not too interesting.
+
 ![Prior robustness](prior_sensitivity.png "Prior robustness")
 
-Complementary, the figure below shows prior-posterior update plots for the win beta mean estimate. 
-Each row correspond to a different lose beta prior, and each panel/column correspond to win beta mean prior. 
+Complementary, the figure below shows prior-posterior update plots for the win_beta mean estimate. 
+Each row correspond to a different lose_beta prior, and each panel/column correspond to win_beta mean prior. 
 
 ![Prior beta mean 0](plot0.png "PP-update for win beta mean = 0")
 ![Prior beta mean 0.5](plot05.png "PP-update for win beta mean = 0.5")
