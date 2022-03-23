@@ -55,6 +55,7 @@ We performed a prior robustness check of the mean values for the parameters alph
 The prior robustness checks for the win_beta estimate can be seen in the two figures below. The win_beta estimate is the most relevant estimate to assess as this parameter reflects the Win-Shift-Lose-Stay bias defined in the data simulation and, hence, we only display sensitivity plots for this estimate. If recovered correctly (this is the case for all runs), the inverse logit of the lose_beta estimate represents 1-win_beta. As we have no noise parameter in any of the agents, this parameter is expected to be 0. All prior settings recover this parameter adequately as somewhere close to zero, so we have omitted plots for this as they are not too interesting.
 
 ![Prior robustness](prior_sensitivity.png "Prior robustness")
+![Prior robustness](prior_sensitivity_lose.png "Prior robustness")
 
 Complementary, the figure below shows prior-posterior update plots for the win_beta mean estimate. 
 Each row correspond to a different lose_beta prior, and each panel/column correspond to win_beta mean prior. 
@@ -101,3 +102,6 @@ In general, the results show that increasing the number of trials all the way to
 
 ## Conclusion
 Overall, the analyses performed revealed that training the model using 10,000 simulated trials from an FeddbackAgent with a true Win-Shift-Loose-Stay bias of 0.7 and with the alpha prior defined as a Gaussian prior with a mean of 0 and sd = 1 and beta priors defined as Gaussian priors with means of 0.5 and sd of 0.5 adequately recovers the true parameter. The plot below display the prior-posterior update for the bias estimate (win_beta estimate) and shows that the model has confidently converged on the true bias:
+![Prior-Posterior Main](pp_update_main.png "Prior-Posterior Main")
+
+
