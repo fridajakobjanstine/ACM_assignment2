@@ -53,7 +53,14 @@ When building our model, we use simulations to perform parameter recovery. By si
 We performed a prior robustness check of the mean values for the parameters alpha, win_beta and lose_beta. We kept the sd constant to reduce computation time. Ideally, we would also have performed robustness checks of the sds. The sd of the alpha (1) means the distribution is quite wide, so we argue it is unlikely that the priors has a too large impact on the parameter estimates. Likewise, the sd of the prior for the betas (0.5) is large enough that e.g. given a mean of 0.5 it allows for estimates of the bias to settle between 0 and 1, which is reasonable estimates. 
 
 The prior robustness checks for the means can be seen in this figure:
--- insert figure --
+![Prior robustness](prior_sensitivity.png "Prior robustness")
+
+Complementary, the figure below shows prior-posterior update plots for the win beta mean estimate. 
+Each row correspond to a different lose beta prior, and each panel/column correspond to win beta mean prior. 
+
+![Prior beta mean 0](plot0.png "PP-update for win beta mean = 0")
+![Prior beta mean 0.5](plot05.png "PP-update for win beta mean = 0.5")
+![Prior beta mean 1](plot1.png "PP-update for win beta mean = 1")
 
 In general, the model seems well equipped to recover the true parameters given all of the combinations of parsed priors. Hence, the model is not overly sensistive to shifts in the priors and the defined set of priors all seem reasonable given the data. However, we deem that setting uninformed conservative beta priors with means of 0.5 and a sd of 0.5 makes most sense.
 
@@ -74,21 +81,21 @@ The results of the analysis can also be found in the table below.
 
 | N simulated trials | Posterior 'Win Beta' Estimate Mean | Posterior 'Win Beta' Estimate SD | True mean rate | 
 |---|---|---|---|
-| 100 | x | x | 0.6 | 
-| 1000 | x | x | 0.6 | 
-| 10000 | x | x | 0.6 |
-| 100 | x | x | 0.65 | 
-| 1000 | x | x | 0.65 |
-| 10000 | x | x | 0.65 |
-| 100 | x | x | 0.7 |
-| 1000 | x | x | 0.7 |
-| 10000 | x | x | 0.7 |
-| 100 | x | x | 0.75 |
-| 1000 | x | x | 0.75 |
-| 10000 | x | x | 0.75 |
-| 100 | x | x | 0.8 |
-| 1000 | x | x | 0.8 |
-| 10000 | x | x | 0.8 |
+| 100 | 0.578 | 0.058 | 0.6 | 
+| 1000 | 0.621 | 0.021 | 0.6 | 
+| 10000 | 0.595 | 0.007 | 0.6 |
+| 100 | 0.681 | 0.056 | 0.65 | 
+| 1000 | 0.689 | 0.02 | 0.65 |
+| 10000 | 0.646 | 0.007 | 0.65 |
+| 100 | 0.712 | 0.056 | 0.7 |
+| 1000 | 0.689 | 0.021 | 0.7 |
+| 10000 | 0.703 | 0.007 | 0.7 |
+| 100 | 0.656 | 0.057 | 0.75 |
+| 1000 | 0.716 | 0.02 | 0.75 |
+| 10000 | 0.761 | 0.006 | 0.75 |
+| 100 | 0.732 | 0.058 | 0.8 |
+| 1000 | 0.798 | 0.018 | 0.8 |
+| 10000 | 0.801 | 0.006 | 0.8 |
 
 In general, the results show that increasing the number of trials all the way to 10,000 continuously increases parameter recovery performance of the model; the beta estimates increasingly approaches the true bias rate and the model becomes increasingly more confident in its estimations (sd drops). We do not deem it necessary to define strict thesholds for identifying the acceptable number of trials but instead conclude that, given the visible improvements from 1000 trials to 10,000 trials, that 10,000 trials is the optimal number needed for sufficient parameter recovery. We do, however, acknowledge that in real life settings, it may be complicated and expensive to gather 10,000 trials and, therefore, also conclude that parameters are also recovered with accecptable precision using e.g. only 1000 trials providing the researcher is aware of the slight decrease in confidence.
 
